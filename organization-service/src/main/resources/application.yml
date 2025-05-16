@@ -1,0 +1,9 @@
+
+spring:
+  application:
+    name: organization-service
+  profiles:
+    active: test
+  config:
+    import: ${CONFIG_SERVER_URL:configserver:http://localhost:8071}
+
