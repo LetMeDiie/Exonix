@@ -1,0 +1,84 @@
+
+services:
+  database:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "amihady"
+      POSTGRES_PASSWORD: "amihady"
+    networks:
+      exonix:
+        aliases:
+          - "database"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  configserver:
+    image: exonix/configserver:0.0.6-SNAPSHOT
+    ports:
+      - "8071:8071"
+    environment:
+      ENCRYPT_KEY: fje83Ki8403Iod87dne7Yjsl3THueh48jfuO9j4U2hf64Lo
+    networks:
+      exonix:
+        aliases:
+          - "configserver"
+
+
+  eurekaserver:
+    image: exonix/eurekaserver:0.0.1-SNAPSHOT
+    environment:
+      CONFIG_SERVER_URL: "configserver:http://configserver:8071"
+    ports:
+      - "8761:8761"
+    depends_on:
+      database:
+        condition: service_healthy
+      configserver:
+        condition: service_started
+    networks:
+      exonix:
+        aliases:
+          - "eurekaserver"
+
+
+  licensingservice:
+    image: exonix/licensing-service:0.0.6-SNAPSHOT
+    environment:
+      SPRING_PROFILES_ACTIVE: "dev"
+      CONFIG_SERVER_URL: "configserver:http://configserver:8071"
+      EUREKA_HOST: "eurekaserver"
+    depends_on:
+      database:
+        condition: service_healthy
+      configserver:
+        condition: service_started
+    ports:
+      - "8080:8080"
+    networks:
+      - exonix
+
+
+  organizationservice:
+    image: exonix/organization-service:0.0.6-SNAPSHOT
+    environment:
+      SPRING_PROFILES_ACTIVE: "dev"
+      CONFIG_SERVER_URL: "configserver:http://configserver:8071"
+      EUREKA_HOST: "eurekaserver"
+    depends_on:
+      database:
+        condition: service_healthy
+      configserver:
+        condition: service_started
+    ports:
+      - "8081:8081"
+    networks:
+      - exonix
+
+networks:
+  exonix:
+    driver: bridge
