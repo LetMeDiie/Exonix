@@ -1,0 +1,21 @@
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: jdbc:postgresql://database:5432/license_db
+    username: amihady
+    password: "{cipher}81f827d813c92accb867112e87a0510237adb36723b5e3b7026a86d0119ffe18"
+    driverClassName: org.postgresql.Driver
+    testWhileIdle: true
+    validationQuery: SELECT 1
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
