@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: eureka-server
+  config:
+    import: ${CONFIG_SERVER_URL:configserver:http://localhost:8071}
