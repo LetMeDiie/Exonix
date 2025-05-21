@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>kz.amihady</groupId>
 	<artifactId>organization-service</artifactId>
-	<version>0.0.6-SNAPSHOT</version>
+	<version>0.0.7-SNAPSHOT</version>
 	<name>Organization-service</name>
 	<description>Organization-service</description>
 	<url/>
@@ -87,6 +87,11 @@
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
 		</dependency>
 
 		<dependency>
