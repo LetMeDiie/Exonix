@@ -4,7 +4,6 @@ spring:
   messages:
     encoding: UTF-8
 
-
 management:
   endpoints:
     web:
@@ -29,3 +28,46 @@ eureka:
 
   liquibase:
     enabled: false
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      failure-rate-threshold: 60
+      sliding-window-size: 20
+      minimum-number-of-calls: 5
+      wait-duration-in-open-state: 10s
+      permitted-number-of-calls-in-half-open-state: 3
+
+  instances:
+    licenseDbCircuitBreaker:
+      base-config: default
+    organizationServiceCircuitBreaker:
+      base-config: default
+
+
+
+resilience4j.retry:
+  configs:
+    default:
+      max-attempts: 3
+      wait-duration: 500ms
+  instances:
+    licenseDbRetry:
+      base-config: default
+    organizationServiceRetry:
+      base-config: default
+
+
+
+resilience4j.ratelimiter:
+  configs:
+    default:
+      limitForPeriod: 5
+      limitRefreshPeriod: 1s
+      timeoutDuration: 0
+  instances:
+    licenseServiceRateLimiter:
+      base-config: default
+    licenseServiceCreateRateLimiter:
+      base-config: default
+      limit-for-period: 2
