@@ -18,7 +18,7 @@ services:
       retries: 5
 
   configserver:
-    image: exonix/configserver:0.0.6-SNAPSHOT
+    image: exonix/configserver:0.0.7-SNAPSHOT
     ports:
       - "8071:8071"
     environment:
@@ -36,8 +36,6 @@ services:
     ports:
       - "8761:8761"
     depends_on:
-      database:
-        condition: service_healthy
       configserver:
         condition: service_started
     networks:
@@ -47,7 +45,7 @@ services:
 
 
   licensingservice:
-    image: exonix/licensing-service:0.0.6-SNAPSHOT
+    image: exonix/licensing-service:0.0.7-SNAPSHOT
     environment:
       SPRING_PROFILES_ACTIVE: "dev"
       CONFIG_SERVER_URL: "configserver:http://configserver:8071"
@@ -64,7 +62,7 @@ services:
 
 
   organizationservice:
-    image: exonix/organization-service:0.0.6-SNAPSHOT
+    image: exonix/organization-service:0.0.7-SNAPSHOT
     environment:
       SPRING_PROFILES_ACTIVE: "dev"
       CONFIG_SERVER_URL: "configserver:http://configserver:8071"
