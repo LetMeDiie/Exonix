@@ -1,11 +1,13 @@
 package kz.amihady.exonix.organization.api.controller;
 
 import jakarta.validation.Valid;
+import kz.amihady.exonix.context.UserContext;
 import kz.amihady.exonix.organization.api.assembler.OrganizationModelAssembler;
 import kz.amihady.exonix.organization.api.dto.request.OrganizationCreateRequest;
 import kz.amihady.exonix.organization.api.dto.request.OrganizationUpdateRequest;
 import kz.amihady.exonix.organization.api.dto.response.OrganizationResponse;
 import kz.amihady.exonix.organization.service.OrganizationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(value="v1/organization")
+@Slf4j
 public class OrganizationRestController {
 
     @Autowired
@@ -25,10 +28,14 @@ public class OrganizationRestController {
     @Autowired
     private OrganizationModelAssembler organizationModelAssembler;
 
+    @Autowired
+    private UserContext userContext;
+
     @GetMapping("/{organizationId}")
     public ResponseEntity<EntityModel<OrganizationResponse>> getOrganization(
             @PathVariable("organizationId") UUID organizationId,
             Locale locale){
+        log.info("Get request with correlation id :" + userContext.getCorrelationId());
         var organizationResponse =
                 organizationService.findById(organizationId,locale);
         return ResponseEntity.ok(organizationModelAssembler.toModel(organizationResponse));

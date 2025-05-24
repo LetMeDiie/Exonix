@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>kz.amihady</groupId>
 	<artifactId>licensing-service</artifactId>
-	<version>0.0.7-SNAPSHOT</version>
+	<version>0.0.8-SNAPSHOT</version>
 	<name>License service</name>
 	<description>Licensing service</description>
 	<url/>
