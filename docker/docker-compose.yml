@@ -18,7 +18,7 @@ services:
       retries: 5
 
   configserver:
-    image: exonix/configserver:0.0.7-SNAPSHOT
+    image: exonix/configserver:0.0.8-SNAPSHOT
     ports:
       - "8071:8071"
     environment:
@@ -45,7 +45,7 @@ services:
 
 
   licensingservice:
-    image: exonix/licensing-service:0.0.7-SNAPSHOT
+    image: exonix/licensing-service:0.0.8-SNAPSHOT
     environment:
       SPRING_PROFILES_ACTIVE: "dev"
       CONFIG_SERVER_URL: "configserver:http://configserver:8071"
@@ -62,7 +62,7 @@ services:
 
 
   organizationservice:
-    image: exonix/organization-service:0.0.7-SNAPSHOT
+    image: exonix/organization-service:0.0.8-SNAPSHOT
     environment:
       SPRING_PROFILES_ACTIVE: "dev"
       CONFIG_SERVER_URL: "configserver:http://configserver:8071"
@@ -76,6 +76,24 @@ services:
       - "8081:8081"
     networks:
       - exonix
+
+
+  gatewayserver:
+    image: exonix/gatewayserver:0.0.1-SNAPSHOT
+    ports:
+      - "8072:8072"
+    environment:
+      CONFIG_SERVER_URL: "configserver:http://configserver:8071"
+      EUREKA_HOST: "eurekaserver"
+    depends_on:
+      configserver:
+        condition: service_started
+      eurekaserver:
+        condition: service_started
+    networks:
+      exonix:
+        aliases:
+          - "gateway"
 
 networks:
   exonix:
